@@ -1,7 +1,7 @@
 import type { ResourceFetchResult } from "./types.js";
 
 export const toMbPerSecond = (bytes: number, elapsedTime: number) => {
-  return bytes / (1024 * 1024) / (elapsedTime / 1000);
+  return bytes / (1000 * 1000) / (elapsedTime / 1000);
 };
 export const getProgress = (downloadedBytes: number, totalBytes: number) => {
   return ((downloadedBytes / totalBytes) * 100).toFixed(1);
