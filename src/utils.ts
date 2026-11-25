@@ -1,5 +1,7 @@
 import type { ResourceFetchResult } from "./types.js";
 
+const REQUEST_TIMEOUT_MS = 30_000;
+
 export const toMbPerSecond = (bytes: number, elapsedTime: number) => {
   return bytes / (1000 * 1000) / (elapsedTime / 1000);
 };
@@ -10,7 +12,9 @@ export const getProgress = (downloadedBytes: number, totalBytes: number) => {
 export const fetchResource = async (
   url: string,
 ): Promise<ResourceFetchResult> => {
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+  });
   if (!response.ok || !response.body) {
     throw new Error(`Ошибка загрузки: ${response.status}`);
   }

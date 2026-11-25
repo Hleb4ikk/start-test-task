@@ -1,11 +1,6 @@
 import readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
-import {
-  calculateFinalResult,
-  fetchResource,
-  getProgress,
-  toMbPerSecond,
-} from "./utils.js";
+import { calculateFinalResult, fetchResource } from "./utils.js";
 import type { ResourceFetchResult } from "./types.js";
 
 async function main() {
@@ -14,9 +9,17 @@ async function main() {
   rl.close();
   const results: ResourceFetchResult[] = [];
 
-  for (let i = 0; i < 10; i++) {
-    const result = await fetchResource(url);
-    results.push(result);
+  try {
+    for (let i = 0; i < 10; i++) {
+      const result = await fetchResource(url);
+      results.push(result);
+    }
+  } catch (error) {
+    const isError = error instanceof Error;
+    if (isError) {
+      console.error(error.message);
+    }
+    process.exit(1);
   }
   const finalResult = calculateFinalResult(results);
   console.log(
